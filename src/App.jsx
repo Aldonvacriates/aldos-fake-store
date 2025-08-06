@@ -3,6 +3,9 @@ import './App.css'
 import{ BrowserRouter as Router, Routes, Route } from 'react-router-dom'
 import NavigationBar from './components/NavigationBar'
 import Home from './components/home'
+import ProductList from './components/ProductList'
+import AddProduct from './components/AddProduct'
+import ProductDetails from './components/ProductDetails'
 
 function App() {
   
