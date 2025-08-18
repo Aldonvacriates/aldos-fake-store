@@ -2,7 +2,7 @@ import { useState } from 'react'
 import './App.css'
 import{ BrowserRouter as Router, Routes, Route } from 'react-router-dom'
 import NavigationBar from './components/NavigationBar'
-import Home from './components/home'
+import Home from './components/Home'
 import ProductList from './components/ProductList'
 import AddProduct from './components/AddProduct'
 import ProductDetails from './components/ProductDetails'
@@ -15,13 +15,14 @@ function App() {
       <NavigationBar />
       <Router>
         <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/products" element={<div>Products Page</div>} />
-          <Route path="/add-product" element={<div>Add Product Page</div>} />
+          <Route path="/" element={<Home/>}/>
+          <Route path="/products" element={<ProductList/>}/>
+          <Route path="/products/:id" element={<ProductDetails/>}/>
+          <Route path="/addproduct" element={<AddProduct/>}/>
         </Routes>
       </Router>
     </>
-  )
+  );
 }
 
 export default App
