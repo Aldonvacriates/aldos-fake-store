@@ -1,28 +1,33 @@
-import { useState } from 'react'
-import './App.css'
-import{ BrowserRouter as Router, Routes, Route } from 'react-router-dom'
-import NavigationBar from './components/NavigationBar'
-import Home from './components/Home'
-import ProductList from './components/ProductList'
-import AddProduct from './components/AddProduct'
-import ProductDetails from './components/ProductDetails'
+import "./App.css";
+import {
+  BrowserRouter as Router,
+  Routes,
+  Route,
+  Navigate,
+} from "react-router-dom";
+
+import Home from "./components/Home";
+import NavigationBar from "./components/NavigationBar";
+import ProductList from "./components/ProductList";
+import AddProduct from "./components/AddProduct";
+import ProductDetails from "./components/ProductDetails";
 
 function App() {
-  
-
   return (
-    <>
+    <Router>
       <NavigationBar />
-      <Router>
+      <main className="py-3">
         <Routes>
-          <Route path="/" element={<Home/>}/>
-          <Route path="/products" element={<ProductList/>}/>
-          <Route path="/products/:id" element={<ProductDetails/>}/>
-          <Route path="/addproduct" element={<AddProduct/>}/>
+          <Route path="/" element={<Home />} />
+          <Route path="/products" element={<ProductList />} />
+          <Route path="/products/:id" element={<ProductDetails />} />
+          <Route path="/addproduct" element={<AddProduct />} />
+          {/* Fallback for unknown routes */}
+          <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>
-      </Router>
-    </>
+      </main>
+    </Router>
   );
 }
 
-export default App
+export default App;
