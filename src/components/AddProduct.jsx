@@ -5,8 +5,6 @@ import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
 import Alert from "react-bootstrap/Alert";
 
-
-
 function AddProduct() {
   const [product, setProduct] = useState();
   const [submitted, setSubmitted] = useState(false);
@@ -28,7 +26,9 @@ function AddProduct() {
     });
   };
 
-{/* handle the form submission */}
+  {
+    /* handle the form submission */
+  }
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
@@ -123,12 +123,16 @@ function AddProduct() {
             required
           />
         </Form.Group>
-        <Button variant="primary" type="submit">
+        <Button
+          variant="primary"
+          type="submit"
+          style={{ backgroundColor: "#003366", borderColor: "#003366" }}
+        >
           Add Product
         </Button>
       </Form>
     </Container>
   );
-};
+}
 
 export default AddProduct;

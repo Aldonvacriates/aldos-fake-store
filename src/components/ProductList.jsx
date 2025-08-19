@@ -90,7 +90,15 @@ function ProductList() {
           className="d-flex justify-content-between align-items-center"
         >
           <div>{error}</div>
-          <Button variant="outline-success" onClick={handleRetry}>
+          <Button
+            variant="outline-success"
+            onClick={handleRetry}
+            style={{
+              backgroundColor: "#003366",
+              borderColor: "#003366",
+              color: "white",
+            }}
+          >
             Retry
           </Button>
         </Alert>
@@ -148,7 +156,11 @@ function ProductList() {
                       {currency.format(price)}
                     </span>
                     {rate && (
-                      <Badge bg="success" title="Average rating">
+                      <Badge
+                        bg="success"
+                        title="Average rating"
+                        style={{ backgroundColor: "#003366" }}
+                      >
                         {rate}
                       </Badge>
                     )}
@@ -164,6 +176,10 @@ function ProductList() {
                       variant="success"
                       className="w-100"
                       aria-label={`View details for ${title}`}
+                      style={{
+                        backgroundColor: "#003366",
+                        borderColor: "#003366",
+                      }}
                     >
                       View details
                     </Button>

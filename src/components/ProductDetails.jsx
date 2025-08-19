@@ -60,7 +60,12 @@ function ProductDetails() {
     return (
       <Container className="py-4">
         <Alert variant="danger">{error}</Alert>
-        <Button as={Link} to="/" variant="success">
+        <Button
+          as={Link}
+          to="/"
+          variant="success"
+          style={{ backgroundColor: "#003366", borderColor: "#003366" }}
+        >
           Back to Products
         </Button>
       </Container>
@@ -71,7 +76,12 @@ function ProductDetails() {
     return (
       <Container className="py-5 text-center">
         <h2>No product found</h2>
-        <Button as={Link} to="/" variant="success">
+        <Button
+          as={Link}
+          to="/"
+          variant="success"
+          style={{ backgroundColor: "#003366", borderColor: "#003366" }}
+        >
           Back to Products
         </Button>
       </Container>
@@ -101,7 +111,12 @@ function ProductDetails() {
             {currency.format(product.price)}
           </Card.Text>
 
-          <Button as={Link} to="/products" variant="success">
+          <Button
+            as={Link}
+            to="/products"
+            variant="success"
+            style={{ backgroundColor: "#003366", borderColor: "#003366" }}
+          >
             Back to Products
           </Button>
         </Card.Body>

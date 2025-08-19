@@ -6,12 +6,11 @@ import {
   Navigate,
 } from "react-router-dom";
 
-import NavigationBar from "./NavigationBar.jsx";
-import Home from "./Home.jsx";
-import ProductList from "./ProductList.jsx";
-import ProductDetails from "./ProductDetails.jsx";
-import AddProduct from "./AddProduct.jsx";
-import EditProduct from "./EditProduct.jsx";
+import Home from "./components/Home";
+import NavigationBar from "./components/NavigationBar";
+import ProductList from "./components/ProductList";
+import AddProduct from "./components/AddProduct";
+import ProductDetails from "./components/ProductDetails";
 
 
 function App() {
