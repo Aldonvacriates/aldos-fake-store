@@ -143,21 +143,23 @@ function ProductList() {
       {/* Title */}
       <h2 className="text-center fw-bold mb-4">Our Products</h2>
 
-      {/* Search + Category */}
-      <Row className="g-3 mb-4 justify-content-center">
+      {/* Search + Category - Better mobile layout */}
+      <Row className="g-3 mb-4">
         <Col xs={12} md={8} lg={7}>
           <Form.Control
             type="search"
             placeholder="Search products…"
             value={query}
             onChange={(e) => setQuery(e.target.value)}
+            className="form-control-lg"
           />
         </Col>
-        <Col xs="auto">
+        <Col xs={12} md={4} lg={5}>
           <DropdownButton
             variant="outline-secondary"
             title={selectedCat}
-            align="end"
+            className="w-100"
+            size="lg"
           >
             {categories.map((cat) => (
               <Dropdown.Item
@@ -172,8 +174,8 @@ function ProductList() {
         </Col>
       </Row>
 
-      {/* Grid */}
-      <Row xs={1} sm={2} md={3} lg={4} className="g-4">
+      {/* Grid - Better responsive breakpoints */}
+      <Row xs={1} sm={2} lg={3} xl={4} className="g-3 g-md-4">
         {filtered.map(({ id, title, price, image }) => (
           <Col key={id}>
             <Card className="h-100 shadow-sm" style={{ borderRadius: 10 }}>
@@ -185,32 +187,46 @@ function ProductList() {
                   src={image}
                   alt={title}
                   loading="lazy"
-                  className="object-fit-contain p-3"
+                  className="object-fit-contain p-2 p-md-3"
                 />
               </div>
-              <Card.Body className="d-flex flex-column">
-                <div className="mb-2 fw-semibold text-truncate" title={title}>
+              <Card.Body className="d-flex flex-column p-3">
+                <div 
+                  className="mb-2 fw-semibold small"
+                  title={title}
+                  style={{
+                    display: '-webkit-box',
+                    WebkitLineClamp: 2,
+                    WebkitBoxOrient: 'vertical',
+                    overflow: 'hidden',
+                    lineHeight: '1.3',
+                    minHeight: '2.6em'
+                  }}
+                >
                   {title}
                 </div>
-                <div className="mb-3 fw-bold">{currency.format(price)}</div>
+                <div className="mb-3 fw-bold text-primary">{currency.format(price)}</div>
 
-                {/* Buttons like screenshot: View Details (light) above Add to Cart (dark) */}
+                {/* Buttons - Improved mobile layout */}
                 <Stack className="mt-auto" gap={2}>
                   <Button
                     as={Link}
                     to={`/products/${id}`}
-                    variant="light"
-                    className="w-100 border"
+                    variant="outline-primary"
+                    className="w-100"
+                    size="sm"
+                    style={{ borderColor: "#003366", color: "#003366" }}
                   >
                     View Details
                   </Button>
                   <Button
-                    variant="dark"
+                    variant="primary"
                     className="w-100"
+                    size="sm"
                     onClick={() => addToCart({ id, title, price, image })}
                     style={{
-                      backgroundColor: "#0b1e33" /* close to your navy */,
-                      borderColor: "#0b1e33",
+                      backgroundColor: "#003366",
+                      borderColor: "#003366",
                     }}
                   >
                     Add to Cart
@@ -224,7 +240,17 @@ function ProductList() {
 
       {filtered.length === 0 && (
         <div className="text-center text-muted mt-5">
-          No products match your filters.
+          <p className="fs-5">No products match your filters.</p>
+          <Button 
+            variant="outline-primary" 
+            onClick={() => {
+              setQuery("");
+              setSelectedCat("All Categories");
+            }}
+            style={{ borderColor: "#003366", color: "#003366" }}
+          >
+            Clear Filters
+          </Button>
         </div>
       )}
     </Container>

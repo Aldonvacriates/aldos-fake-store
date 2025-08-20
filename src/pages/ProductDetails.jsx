@@ -2,7 +2,7 @@ import { useEffect, useState, useMemo } from "react";
 import { useParams, Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { useCart } from "../hooks/useCart";
-import { toast } from "react-toastify"; // optional, since you already mounted ToastContainer
+import { toast } from "react-toastify";
 
 import Container from "react-bootstrap/Container";
 import Card from "react-bootstrap/Card";
@@ -12,7 +12,6 @@ import Button from "react-bootstrap/Button";
 import Spinner from "react-bootstrap/Spinner";
 import Alert from "react-bootstrap/Alert";
 import Badge from "react-bootstrap/Badge";
-import Stack from "react-bootstrap/Stack";
 import Modal from "react-bootstrap/Modal";
 
 function ProductDetails() {
@@ -27,21 +26,19 @@ function ProductDetails() {
   const [showDelete, setShowDelete] = useState(false);
   const [deleting, setDeleting] = useState(false);
 
-  // TODO: Replace with your real cart context if you have one.
-  const addToCart = (p) => {
-    addItem(p, 1);
-    toast.success("Added to cart"); // optional
-  };
-
   const currency = useMemo(
     () =>
       new Intl.NumberFormat("en-US", { style: "currency", currency: "USD" }),
     []
   );
 
+  const addToCart = (p) => {
+    addItem(p, 1);
+    toast.success("Added to cart");
+  };
+
   useEffect(() => {
     const controller = new AbortController();
-
     (async () => {
       try {
         setLoading(true);
@@ -53,13 +50,12 @@ function ProductDetails() {
         setProduct(data);
       } catch (err) {
         if (axios.isCancel(err)) return;
-        console.error("Error fetching product details:", err);
+        console.error(err);
         setError("Couldn’t load product details. Please try again.");
       } finally {
         setLoading(false);
       }
     })();
-
     return () => controller.abort();
   }, [id]);
 
@@ -67,7 +63,6 @@ function ProductDetails() {
     setDeleting(true);
     try {
       await axios.delete(`https://fakestoreapi.com/products/${id}`);
-      // FakeStoreAPI doesn't persist deletes; this just simulates success.
       navigate("/products");
     } catch (err) {
       console.error("Delete failed:", err);
@@ -118,26 +113,30 @@ function ProductDetails() {
           </div>
 
           <Row className="g-4">
-            <Col md={4}>
+            <Col md={5}>
               <div className="border rounded p-3 bg-light">
                 <img
                   src={product.image}
                   alt={product.title}
-                  className="img-fluid object-fit-contain"
-                  style={{ maxHeight: 260 }}
+                  className="img-fluid rounded"
+                  style={{
+                    maxHeight: 300,
+                    objectFit: "contain",
+                    width: "100%",
+                  }}
                   loading="lazy"
                 />
               </div>
             </Col>
 
-            <Col md={8}>
-              <p className="mb-2">
-                <strong>Category:</strong>{" "}
-                <Badge bg="secondary">{product.category}</Badge>
+            <Col md={7}>
+              <p className="mb-2 text-muted">
+                Category:{" "}
+                <span className="text-capitalize">
+                  <Badge bg="secondary">{product.category}</Badge>
+                </span>
               </p>
-
               <p className="mb-3">{product.description}</p>
-
               <small className="text-muted">
                 Rating: {product.rating?.rate} ({product.rating?.count} reviews)
               </small>
@@ -145,39 +144,47 @@ function ProductDetails() {
           </Row>
         </Card.Body>
 
+        {/* ✅ Full-width stacked actions like your screenshot */}
         <Card.Footer className="bg-white">
-          <Stack
-            direction="horizontal"
-            gap={2}
-            className="justify-content-end flex-wrap"
-          >
-            <Button
-              variant="primary"
-              onClick={() => addToCart(product)}
-              style={{ backgroundColor: "#003366", borderColor: "#003366" }}
-            >
-              Add to Cart
-            </Button>
+          <div className="row g-2">
+            <div className="col-12">
+              <Button
+                className="w-100 py-2"
+                variant="primary"
+                onClick={() => addToCart(product)}
+                style={{ backgroundColor: "#0b132b", borderColor: "#0b132b" }} // dark navy
+              >
+                Add to Cart
+              </Button>
+            </div>
 
-            <Button
-              as={Link}
-              to={`/edit-product/${product.id}`}
-              variant="outline-secondary"
-            >
-              Edit Product
-            </Button>
+            <div className="col-12">
+              <Button
+                as={Link}
+                to={`/edit-product/${product.id}`}
+                variant="outline-secondary"
+                className="w-100 py-2"
+              >
+                Edit Product
+              </Button>
+            </div>
 
-            <Button
-              variant="danger"
-              onClick={() => setShowDelete(true)}
-              disabled={deleting}
-              style={{ backgroundColor: "#ac141bff", borderColor: "#a70334ff" }}
-            >
-              {deleting ? "Deleting…" : "Delete Product"}
-            </Button>
-          </Stack>
+            <div className="col-12">
+              <Button
+                variant="danger"
+                className="w-100 py-2"
+                onClick={() => setShowDelete(true)}
+                disabled={deleting}
+                style={{ backgroundColor: "#e74b4b", borderColor: "#e74b4b" }} // red like screenshot
+              >
+                {deleting ? "Deleting…" : "Delete Product"}
+              </Button>
+            </div>
+          </div>
         </Card.Footer>
       </Card>
+
+      <div className="text-center text-muted mt-3">AldoWebsite</div>
 
       {/* Delete confirmation modal */}
       <Modal
@@ -201,11 +208,11 @@ function ProductDetails() {
             variant="danger"
             onClick={confirmDelete}
             disabled={deleting}
-            style={{ backgroundColor: "#ac141bff", borderColor: "#a70334ff" }}
+            style={{ backgroundColor: "#e74b4b", borderColor: "#e74b4b" }}
           >
             {deleting ? (
               <>
-                <Spinner size="sm" animation="border" className="me-2" />{" "}
+                <Spinner size="sm" animation="border" className="me-2" />
                 Deleting…
               </>
             ) : (
