@@ -71,7 +71,13 @@ export default function ProductForm({
         />
       </Form.Group>
 
-      <Button variant="primary" type="submit" disabled={submitting}>
+      <Button
+        variant="primary"
+        type="submit"
+        disabled={submitting}
+        style={{ backgroundColor: "#003366", borderColor: "#003366" }}
+        className="w-100"
+      >
         {submitting ? "Submitting..." : submitLabel}
       </Button>
     </Form>

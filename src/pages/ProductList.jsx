@@ -191,21 +191,23 @@ function ProductList() {
                 />
               </div>
               <Card.Body className="d-flex flex-column p-3">
-                <div 
+                <div
                   className="mb-2 fw-semibold small"
                   title={title}
                   style={{
-                    display: '-webkit-box',
+                    display: "-webkit-box",
                     WebkitLineClamp: 2,
-                    WebkitBoxOrient: 'vertical',
-                    overflow: 'hidden',
-                    lineHeight: '1.3',
-                    minHeight: '2.6em'
+                    WebkitBoxOrient: "vertical",
+                    overflow: "hidden",
+                    lineHeight: "1.3",
+                    minHeight: "2.6em",
                   }}
                 >
                   {title}
                 </div>
-                <div className="mb-3 fw-bold text-primary">{currency.format(price)}</div>
+                <div className="mb-3 fw-bold text-primary">
+                  {currency.format(price)}
+                </div>
 
                 {/* Buttons - Improved mobile layout */}
                 <Stack className="mt-auto" gap={2}>
@@ -241,8 +243,8 @@ function ProductList() {
       {filtered.length === 0 && (
         <div className="text-center text-muted mt-5">
           <p className="fs-5">No products match your filters.</p>
-          <Button 
-            variant="outline-primary" 
+          <Button
+            variant="outline-primary"
             onClick={() => {
               setQuery("");
               setSelectedCat("All Categories");

@@ -11,6 +11,7 @@ import NavigationBar from "./components/NavigationBar";
 import ProductList from "./pages/ProductList";
 import AddProduct from "./components/AddProduct";
 import ProductDetails from "./pages/ProductDetails";
+import EditProduct from "./components/EditProduct";
 import Checkout from "./components/Checkout";
 import Cart from "./pages/CartPage"; // 👈 make sure this exists
 
@@ -31,6 +32,7 @@ function App() {
             <Route path="/" element={<Home />} />
             <Route path="/products" element={<ProductList />} />
             <Route path="/products/:id" element={<ProductDetails />} />
+            <Route path="/edit-product/:id" element={<EditProduct />} />
             <Route path="/addproduct" element={<AddProduct />} />
             <Route path="/cart" element={<Cart />} />
             <Route path="/checkout" element={<Checkout />} />
