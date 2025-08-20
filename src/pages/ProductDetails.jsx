@@ -15,7 +15,6 @@ import Badge from "react-bootstrap/Badge";
 import Stack from "react-bootstrap/Stack";
 import Modal from "react-bootstrap/Modal";
 
-
 function ProductDetails() {
   const { addItem } = useCart();
   const { id } = useParams();

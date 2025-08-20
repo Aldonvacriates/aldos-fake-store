@@ -33,11 +33,11 @@ export default function CartPage() {
           className="d-flex justify-content-between align-items-center"
         >
           <div>Your cart is empty.</div>
-          <Button 
-            as={Link} 
-            to="/products" 
+          <Button
+            as={Link}
+            to="/products"
             variant="primary"
-            style={{ backgroundColor: '#003366', borderColor: '#003366' }}
+            style={{ backgroundColor: "#003366", borderColor: "#003366" }}
           >
             Browse products
           </Button>
@@ -123,7 +123,7 @@ export default function CartPage() {
                 to="/checkout"
                 variant="success"
                 className="w-100 mb-2"
-                style={{ backgroundColor: '#003366', borderColor: '#003366' }}
+                style={{ backgroundColor: "#003366", borderColor: "#003366" }}
               >
                 Checkout
               </Button>
