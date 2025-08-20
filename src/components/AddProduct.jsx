@@ -62,18 +62,18 @@ function AddProduct() {
       )}
       {/* Form to add a new product */}
       <Form onSubmit={handleSubmit}>
-        {/* Image URL 
+        {/* Image URL */}
         <Form.Group className="mb-3">
           <Form.Label>Image URL</Form.Label>
           <Form.Control
             type="text"
-            placeholder="Enter image URL"
+            placeholder="https://placehold.co/600x400"
             name="image"
             value={formData.image}
             onChange={handleChange}
             required
           />
-        </Form.Group>*/}
+        </Form.Group>
         {/*Title*/}
         <Form.Group className="mb-3">
           <Form.Label>Title</Form.Label>
