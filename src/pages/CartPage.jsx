@@ -8,7 +8,7 @@ import Form from "react-bootstrap/Form";
 import Card from "react-bootstrap/Card";
 import Alert from "react-bootstrap/Alert";
 import { Link } from "react-router-dom";
-import { useCart } from "../hooks/useCart";
+import { useCart } from "../hooks";
 
 export default function CartPage() {
   const { items, cartTotal, cartCount, updateQty, removeItem, clearCart } =

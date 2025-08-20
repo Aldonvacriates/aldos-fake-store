@@ -1,7 +1,7 @@
 import { useEffect, useState, useMemo } from "react";
 import { useParams, Link, useNavigate } from "react-router-dom";
 import axios from "axios";
-import { useCart } from "../hooks/useCart";
+import { useCart } from "../hooks";
 import { toast } from "react-toastify";
 
 import Container from "react-bootstrap/Container";

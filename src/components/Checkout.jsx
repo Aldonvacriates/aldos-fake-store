@@ -12,7 +12,7 @@ import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
 import Alert from "react-bootstrap/Alert";
 import Spinner from "react-bootstrap/Spinner";
-import { useCart } from "../hooks/useCart";
+import { useCart } from "../hooks";
 
 export default function Checkout() {
   const navigate = useNavigate();

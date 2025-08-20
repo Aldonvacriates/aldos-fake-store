@@ -6,19 +6,22 @@ import {
   Navigate,
 } from "react-router-dom";
 
+// Pages
 import Home from "./pages/Home";
-import NavigationBar from "./components/NavigationBar";
 import ProductList from "./pages/ProductList";
-import AddProduct from "./components/AddProduct";
 import ProductDetails from "./pages/ProductDetails";
+import Cart from "./pages/CartPage";
+
+// Components
+import NavigationBar from "./components/NavigationBar";
+import AddProduct from "./components/AddProduct";
 import EditProduct from "./components/EditProduct";
 import Checkout from "./components/Checkout";
-import Cart from "./pages/CartPage"; // 👈 make sure this exists
 
-// 👇 Cart context
+// Context
 import { CartProvider } from "./context/CartContext";
 
-// 👇 toasts
+// Toasts
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
@@ -40,7 +43,6 @@ function App() {
           </Routes>
         </main>
 
-        {/* global toasts (bottom-right) */}
         <ToastContainer
           position="bottom-right"
           autoClose={3000}

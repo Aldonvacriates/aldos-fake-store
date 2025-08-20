@@ -4,7 +4,7 @@ import Navbar from "react-bootstrap/Navbar";
 import Nav from "react-bootstrap/Nav";
 import Container from "react-bootstrap/Container";
 import Badge from "react-bootstrap/Badge";
-import { useCart } from "../hooks/useCart";
+import { useCart } from "../hooks";
 
 function NavigationBar() {
   const { cartCount } = useCart();

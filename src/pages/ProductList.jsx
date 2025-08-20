@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState } from "react";
 import axios from "axios";
 import { Link } from "react-router-dom";
+import { useCart } from "../hooks";
 
 import Container from "react-bootstrap/Container";
 import Row from "react-bootstrap/Row";
@@ -16,6 +17,7 @@ import Stack from "react-bootstrap/Stack";
 import { toast } from "react-toastify";
 
 function ProductList() {
+  const { addItem } = useCart();
   const [products, setProducts] = useState([]);
   const [categories, setCategories] = useState(["All Categories"]);
   const [loading, setLoading] = useState(true);
@@ -84,24 +86,8 @@ function ProductList() {
 
   const addToCart = (product) => {
     try {
-      // Read existing cart from localStorage (array of { id, title, price, image, quantity })
-      const raw = localStorage.getItem("cart");
-      const cart = raw ? JSON.parse(raw) : [];
-
-      // Find existing item and increment quantity, or add new item
-      const idx = cart.findIndex((it) => it.id === product.id);
-      if (idx >= 0) {
-        cart[idx].quantity = (cart[idx].quantity || 1) + 1;
-      } else {
-        cart.push({ ...product, quantity: 1 });
-      }
-
-      // Persist updated cart
-      localStorage.setItem("cart", JSON.stringify(cart));
-
-      // Notify UI / other parts of the app (optional)
-      window.dispatchEvent(new CustomEvent("cartUpdated", { detail: cart }));
-
+      // Use the cart context instead of localStorage directly
+      addItem(product, 1);
       toast.success(`Added "${product.title}" to cart`);
     } catch (err) {
       console.error("Add to cart failed:", err);
