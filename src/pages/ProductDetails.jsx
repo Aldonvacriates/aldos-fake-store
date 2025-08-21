@@ -1,9 +1,13 @@
+// ProductDetails.jsx
+// Displays detailed information for a single product, including actions to add to cart, edit, or delete.
+
 import { useEffect, useState, useMemo } from "react";
 import { useParams, Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { useCart } from "../hooks";
 import { toast } from "react-toastify";
 
+// Bootstrap components for layout and UI
 import Container from "react-bootstrap/Container";
 import Card from "react-bootstrap/Card";
 import Row from "react-bootstrap/Row";
@@ -15,28 +19,36 @@ import Badge from "react-bootstrap/Badge";
 import Modal from "react-bootstrap/Modal";
 
 function ProductDetails() {
+  // Access addItem from cart context
   const { addItem } = useCart();
+
+  // Get product ID from URL params and navigation helper
   const { id } = useParams();
   const navigate = useNavigate();
 
+  // State for product data, loading, and error
   const [product, setProduct] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
+  // State for delete confirmation modal and deleting status
   const [showDelete, setShowDelete] = useState(false);
   const [deleting, setDeleting] = useState(false);
 
+  // Currency formatter for displaying price
   const currency = useMemo(
     () =>
       new Intl.NumberFormat("en-US", { style: "currency", currency: "USD" }),
     []
   );
 
+  // Add product to cart and show toast notification
   const addToCart = (p) => {
     addItem(p, 1);
     toast.success("Added to cart");
   };
 
+  // Fetch product details from API when component mounts or id changes
   useEffect(() => {
     const controller = new AbortController();
     (async () => {
@@ -56,14 +68,16 @@ function ProductDetails() {
         setLoading(false);
       }
     })();
+    // Cleanup: abort fetch if component unmounts
     return () => controller.abort();
   }, [id]);
 
+  // Handle product deletion with confirmation
   const confirmDelete = async () => {
     setDeleting(true);
     try {
       await axios.delete(`https://fakestoreapi.com/products/${id}`);
-      navigate("/products");
+      navigate("/products"); // Redirect to product list after delete
     } catch (err) {
       console.error("Delete failed:", err);
       setDeleting(false);
@@ -72,6 +86,7 @@ function ProductDetails() {
     }
   };
 
+  // Show loading spinner while fetching data
   if (loading) {
     return (
       <div className="d-flex justify-content-center align-items-center py-5">
@@ -81,6 +96,7 @@ function ProductDetails() {
     );
   }
 
+  // Show error alert if fetch fails
   if (error) {
     return (
       <Container className="py-4">
@@ -92,6 +108,7 @@ function ProductDetails() {
     );
   }
 
+  // Show message if no product is found
   if (!product) {
     return (
       <Container className="py-5 text-center">
@@ -105,14 +122,17 @@ function ProductDetails() {
 
   return (
     <Container className="my-4">
+      {/* Product card with image, details, and actions */}
       <Card className="shadow-sm mx-auto" style={{ maxWidth: 820 }}>
         <Card.Body>
+          {/* Product title and price */}
           <Card.Title className="mb-2 h3 fw-bold">{product.title}</Card.Title>
           <div className="text-muted mb-3">
             {currency.format(product.price)}
           </div>
 
           <Row className="g-4">
+            {/* Product image */}
             <Col md={5}>
               <div className="border rounded p-3 bg-light">
                 <img
@@ -129,6 +149,7 @@ function ProductDetails() {
               </div>
             </Col>
 
+            {/* Product details */}
             <Col md={7}>
               <p className="mb-2 text-muted">
                 Category:{" "}
@@ -144,9 +165,10 @@ function ProductDetails() {
           </Row>
         </Card.Body>
 
-        {/* ✅ Full-width stacked actions like your screenshot */}
+        {/* Action buttons: Add to Cart, Edit, Delete */}
         <Card.Footer className="bg-white">
           <div className="row g-2">
+            {/* Add to Cart button */}
             <div className="col-12">
               <Button
                 className="w-100 py-2"
@@ -158,6 +180,7 @@ function ProductDetails() {
               </Button>
             </div>
 
+            {/* Edit Product button */}
             <div className="col-12">
               <Button
                 as={Link}
@@ -169,6 +192,7 @@ function ProductDetails() {
               </Button>
             </div>
 
+            {/* Delete Product button */}
             <div className="col-12">
               <Button
                 variant="danger"
@@ -184,6 +208,7 @@ function ProductDetails() {
         </Card.Footer>
       </Card>
 
+      {/* Footer/branding */}
       <div className="text-center text-muted mt-3">AldoWebsite</div>
 
       {/* Delete confirmation modal */}
