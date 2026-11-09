@@ -1,231 +1,74 @@
-# 🛒 Aldo's Fake Store
+# Aldo's Fake Store
 
-A modern, responsive e-commerce web application built with React, featuring a complete shopping experience with product browsing, cart management, and checkout functionality.
+A responsive React storefront demo built on the public [Fake Store API](https://fakestoreapi.com/): browse and search products, manage them with create/edit/delete forms, keep a cart that survives page reloads, and walk through a mock checkout.
 
-![React](https://img.shields.io/badge/React-19.1.0-blue.svg)
-![Vite](https://img.shields.io/badge/Vite-7.0.4-green.svg)
-![Bootstrap](https://img.shields.io/badge/Bootstrap-5.3.7-purple.svg)
-![License](https://img.shields.io/badge/License-MIT-yellow.svg)
+**Live demo:** https://aldos-fake-store.vercel.app
 
-## ✨ Features
+Built as a React assignment during the Coding Temple bootcamp, August 2025.
 
-### 🏪 Core E-commerce Functionality
+> **Note on data:** the Fake Store API accepts `POST`, `PUT` and `DELETE` requests and returns a plausible response, but it does not save anything. Products you add, edit or delete will not appear in the catalog afterwards. Checkout is also simulated: no payment is processed and no order is sent anywhere.
 
-- **Product Catalog** - Browse and search through a wide range of products
-- **Product Details** - View detailed information, images, and specifications
-- **Shopping Cart** - Add, remove, and manage items with persistent storage
-- **Checkout Process** - Complete purchase flow with form validation
-- **Responsive Design** - Optimized for desktop, tablet, and mobile devices
+## Features
 
-### 🔧 Advanced Features
+- **Product catalog** with a text search (title and description) and a category filter, both applied client side (`src/pages/ProductList.jsx`).
+- **Product details** page with Add to Cart, Edit and Delete (behind a confirmation modal) (`src/pages/ProductDetails.jsx`).
+- **Add and edit product forms** that send `POST` / `PUT` requests to the API (`src/components/AddProduct.jsx`, `src/components/EditProduct.jsx`).
+- **Cart** with quantity updates, item removal, clear cart, a live item count in the navbar and a running total, persisted to `localStorage` (`src/context/CartContext.jsx`, `src/pages/CartPage.jsx`).
+- **Mock checkout** with contact, shipping and payment fields, client-side validation (required fields, email, card number length, MM/YY expiry, CVC), a short simulated delay and a generated order ID; the cart is cleared on success (`src/components/Checkout.jsx`).
+- Toast notifications, loading spinners and error states with a retry button.
 
-- **Product Management** - Add, edit, and delete products (admin functionality)
-- **Category Filtering** - Filter products by categories
-- **Search Functionality** - Real-time product search
-- **Local Storage** - Cart persistence across browser sessions
-- **Toast Notifications** - User feedback for actions
-- **Loading States** - Smooth UX with loading indicators
+## Tech stack
 
-### 🎨 UI/UX Features
+React 19, Vite 7, React Router 7, React Bootstrap 2 / Bootstrap 5, Axios, React Toastify, ESLint 9. Plain JavaScript (JSX). Deployed on Vercel.
 
-- **Modern Design** - Clean, professional interface with consistent theming
-- **Dark Blue Theme** - Cohesive color scheme throughout the application
-- **Interactive Elements** - Hover effects and smooth transitions
-- **Mobile-First** - Responsive design that works on all screen sizes
+## How it works
 
-## 🚀 Demo
+- **Cart state is a reducer behind React Context.** `CartProvider` in `src/context/CartContext.jsx` uses `useReducer` with `ADD`, `REMOVE`, `UPDATE_QTY` and `CLEAR` actions. The initial state is loaded lazily from `localStorage` (key `cart:v1`) and written back on every change, with both reads and writes wrapped in `try/catch` so malformed or unavailable storage falls back to an empty cart instead of crashing. Only a small snapshot of each product (id, title, price, image) is stored. `cartCount` and `cartTotal` are derived with `useMemo`.
+- **A guarded `useCart` hook.** `src/hooks/useCart.js` wraps `useContext` and throws a clear error if a component is rendered outside `CartProvider`.
+- **Cancellable parallel fetches.** `ProductList.jsx` loads products and categories with `Promise.all` and passes an `AbortController` signal to Axios, aborting in the effect cleanup so an unmounted page never sets state. `ProductDetails.jsx` uses the same pattern.
+- **Routing.** `src/App.jsx` defines all routes (`/`, `/products`, `/products/:id`, `/addproduct`, `/edit-product/:id`, `/cart`, `/checkout`) and redirects unknown paths to the home page.
 
-The application uses the [Fake Store API](https://fakestoreapi.com/) to provide realistic product data for demonstration purposes.
+## Getting started
 
-## 📦 Installation
+Prerequisites: Node.js 20.19+ or 22.12+ (required by Vite 7) and npm.
 
-### Prerequisites
+```bash
+git clone https://github.com/Aldonvacriates/aldos-fake-store.git
+cd aldos-fake-store
+npm install
+npm run dev        # http://localhost:5173
+```
 
-- Node.js (v18 or higher)
-- npm or yarn package manager
+No environment variables are needed; the API base URL (`https://fakestoreapi.com`) is set in the source.
 
-### Setup
+| Command           | What it does                     |
+| ----------------- | -------------------------------- |
+| `npm run dev`     | Start the Vite dev server        |
+| `npm run build`   | Build for production into `dist` |
+| `npm run preview` | Serve the production build       |
+| `npm run lint`    | Run ESLint                       |
 
-1. **Clone the repository**
+There is no automated test suite yet.
 
-   ```bash
-   git clone https://github.com/Aldonvacriates/aldos-fake-store.git
-   cd aldos-fake-store
-   ```
-
-2. **Install dependencies**
-
-   ```bash
-   npm install
-   ```
-
-3. **Start the development server**
-
-   ```bash
-   npm run dev
-   ```
-
-4. **Open your browser**
-   Navigate to `http://localhost:5173`
-
-## 🛠️ Built With
-
-### Frontend Framework
-
-- **[React 19.1.0](https://reactjs.org/)** - Modern JavaScript library for building user interfaces
-- **[Vite 7.0.4](https://vitejs.dev/)** - Fast build tool and development server
-
-### UI Framework & Styling
-
-- **[React Bootstrap 2.10.10](https://react-bootstrap.github.io/)** - Bootstrap components for React
-- **[Bootstrap 5.3.7](https://getbootstrap.com/)** - CSS framework for responsive design
-
-### Routing & Navigation
-
-- **[React Router DOM 7.7.1](https://reactrouter.com/)** - Declarative routing for React applications
-
-### HTTP Client & API
-
-- **[Axios 1.11.0](https://axios-http.com/)** - Promise-based HTTP client
-- **[Fake Store API](https://fakestoreapi.com/)** - RESTful API for product data
-
-### Notifications
-
-- **[React Toastify 11.0.5](https://fkhadra.github.io/react-toastify/)** - Toast notifications for React
-
-## 📁 Project Structure
+## Project structure
 
 ```
 src/
-├── api/                    # API service functions
-│   └── api.js             # Axios API calls
-├── components/            # Reusable UI components
-│   ├── AddProduct.jsx     # Product creation form
-│   ├── Checkout.jsx       # Checkout process
-│   ├── EditProduct.jsx    # Product editing form
-│   ├── Loader.jsx         # Loading spinner
-│   ├── NavigationBar.jsx  # Main navigation
-│   └── ProductForm.jsx    # Shared product form
-├── context/               # React Context providers
-│   └── CartContext.jsx    # Shopping cart state management
-├── hooks/                 # Custom React hooks
-│   ├── index.js          # Hook exports
-│   ├── useApi.js         # API call management
-│   ├── useCart.js        # Cart operations
-│   ├── useDebounce.js    # Debouncing utilities
-│   └── useLocalStorage.js # LocalStorage management
-├── pages/                 # Main application pages
-│   ├── CartPage.jsx      # Shopping cart view
-│   ├── Home.jsx          # Landing page
-│   ├── ProductDetails.jsx # Individual product view
-│   └── ProductList.jsx   # Product catalog
-├── App.jsx               # Main application component
-└── main.jsx             # Application entry point
+  api/api.js          Axios helpers for the product endpoints
+  components/         Navbar, add/edit product forms, checkout, loader
+  context/            CartContext (reducer + localStorage persistence)
+  hooks/              useCart, plus useApi, useDebounce, useLocalStorage
+  pages/              Home, ProductList, ProductDetails, CartPage
+  App.jsx             Routes, CartProvider and toast container
 ```
 
-## 🔄 Available Scripts
+## What I'd improve next
 
-| Command           | Description                              |
-| ----------------- | ---------------------------------------- |
-| `npm run dev`     | Start development server with hot reload |
-| `npm run build`   | Build the project for production         |
-| `npm run preview` | Preview the production build locally     |
-| `npm run lint`    | Run ESLint for code quality checks       |
+- Route every request through `src/api/api.js` (only the edit page uses it today; the list, details and add pages call Axios directly with hardcoded URLs) and read the base URL from a Vite env variable.
+- Use the hooks that are already written but not wired in yet: `useDebounce` for the search box and `useApi` for fetching.
+- Add a Vercel rewrite so direct links to routes such as `/products` load the app instead of returning 404 (navigating from the home page works).
+- Add tests for the cart reducer and the checkout validation.
 
-## 🌟 Key Components
+## Credits
 
-### Cart Management
-
-- **Persistent Storage** - Cart data saved to localStorage
-- **Real-time Updates** - Cart count updates across all components
-- **Quantity Management** - Add, remove, and update item quantities
-
-### Product Operations
-
-- **CRUD Operations** - Full create, read, update, delete functionality
-- **Form Validation** - Client-side validation for all forms
-- **Error Handling** - Graceful error handling with user feedback
-
-### Responsive Design
-
-- **Mobile-First** - Optimized for mobile devices
-- **Flexible Grid** - Bootstrap grid system for layouts
-- **Touch-Friendly** - Appropriate touch targets for mobile users
-
-## 🎯 Usage Examples
-
-### Adding Items to Cart
-
-```javascript
-import { useCart } from "../hooks";
-
-function ProductCard({ product }) {
-  const { addItem } = useCart();
-
-  const handleAddToCart = () => {
-    addItem(product, 1);
-    toast.success(`Added ${product.title} to cart`);
-  };
-
-  return <button onClick={handleAddToCart}>Add to Cart</button>;
-}
-```
-
-### Using Custom Hooks
-
-```javascript
-import { useLocalStorage, useDebounce } from "../hooks";
-
-function SearchComponent() {
-  const [query, setQuery] = useLocalStorage("searchQuery", "");
-  const debouncedQuery = useDebounce(query, 300);
-
-  // Search logic here...
-}
-```
-
-## 🔧 Configuration
-
-### Environment Variables
-
-Create a `.env` file in the root directory for any environment-specific configurations:
-
-```env
-VITE_API_BASE_URL=https://fakestoreapi.com
-```
-
-### Build Configuration
-
-The project uses Vite for bundling. Configuration can be modified in `vite.config.js`.
-
-## 🐛 Known Issues & Limitations
-
-- **API Limitations** - Fake Store API doesn't persist changes (add/edit/delete operations are simulated)
-- **No Authentication** - Currently no user authentication system
-- **No Payment Processing** - Checkout is for demonstration purposes only
-
-## 🤝 Contributing
-
-1. Fork the repository
-2. Create a feature branch (`git checkout -b feature/amazing-feature`)
-3. Commit your changes (`git commit -m 'Add amazing feature'`)
-4. Push to the branch (`git push origin feature/amazing-feature`)
-5. Open a Pull Request
-
-## 📝 License
-
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
-
-## 👨‍💻 Author
-
-**Aldo** - [Aldonvacriates](https://github.com/Aldonvacriates)
-
-## 🙏 Acknowledgments
-
-- [Fake Store API](https://fakestoreapi.com/) for providing the product data
-- [React Bootstrap](https://react-bootstrap.github.io/) for the UI components
-- [Vite](https://vitejs.dev/) for the amazing build tool
-
----
-
-**Made with ❤️ by Aldo**
+Product data from the [Fake Store API](https://fakestoreapi.com/). Author: [Aldo Herrera](https://github.com/Aldonvacriates).
