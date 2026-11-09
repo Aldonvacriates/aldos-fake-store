@@ -1,21 +1,21 @@
 # Aldo's Fake Store
 
-A responsive React storefront demo built on the public [Fake Store API](https://fakestoreapi.com/): browse and search products, manage them with create/edit/delete forms, keep a cart that survives page reloads, and walk through a mock checkout.
+A responsive React storefront demo built on the public [Fake Store API](https://fakestoreapi.com/): browse and search products, add and edit them with forms or delete them, keep a cart that survives page reloads, and walk through a mock checkout.
 
 **Live demo:** https://aldos-fake-store.vercel.app
 
 Built as a React assignment during the Coding Temple bootcamp, August 2025.
 
-> **Note on data:** the Fake Store API accepts `POST`, `PUT` and `DELETE` requests and returns a plausible response, but it does not save anything. Products you add, edit or delete will not appear in the catalog afterwards. Checkout is also simulated: no payment is processed and no order is sent anywhere.
+> **Note on data:** the Fake Store API accepts `POST`, `PUT` and `DELETE` requests and returns a success response, but it does not save anything. The catalog does not change afterwards: new products do not appear, edits are lost and deleted products are still listed. Checkout is also simulated: no payment is processed and no order is sent anywhere.
 
 ## Features
 
 - **Product catalog** with a text search (title and description) and a category filter, both applied client side (`src/pages/ProductList.jsx`).
-- **Product details** page with Add to Cart, Edit and Delete (behind a confirmation modal) (`src/pages/ProductDetails.jsx`).
+- **Product details** page with Add to Cart and Edit buttons, and Delete behind a confirmation modal (`src/pages/ProductDetails.jsx`).
 - **Add and edit product forms** that send `POST` / `PUT` requests to the API (`src/components/AddProduct.jsx`, `src/components/EditProduct.jsx`).
 - **Cart** with quantity updates, item removal, clear cart, a live item count in the navbar and a running total, persisted to `localStorage` (`src/context/CartContext.jsx`, `src/pages/CartPage.jsx`).
 - **Mock checkout** with contact, shipping and payment fields, client-side validation (required fields, email, card number length, MM/YY expiry, CVC), a short simulated delay and a generated order ID; the cart is cleared on success (`src/components/Checkout.jsx`).
-- Toast notifications, loading spinners and error states with a retry button.
+- Toast notifications, loading spinners and error states (the product list adds a Retry button).
 
 ## Tech stack
 
@@ -23,9 +23,9 @@ React 19, Vite 7, React Router 7, React Bootstrap 2 / Bootstrap 5, Axios, React 
 
 ## How it works
 
-- **Cart state is a reducer behind React Context.** `CartProvider` in `src/context/CartContext.jsx` uses `useReducer` with `ADD`, `REMOVE`, `UPDATE_QTY` and `CLEAR` actions. The initial state is loaded lazily from `localStorage` (key `cart:v1`) and written back on every change, with both reads and writes wrapped in `try/catch` so malformed or unavailable storage falls back to an empty cart instead of crashing. Only a small snapshot of each product (id, title, price, image) is stored. `cartCount` and `cartTotal` are derived with `useMemo`.
+- **Cart state is a reducer behind React Context.** `CartProvider` in `src/context/CartContext.jsx` uses `useReducer` with `ADD`, `REMOVE`, `UPDATE_QTY` and `CLEAR` actions. The initial state is loaded lazily from `localStorage` (key `cart:v1`) and written back on every change, with reads and writes wrapped in `try/catch`: malformed or unavailable storage on load falls back to an empty cart, and a failed write is ignored instead of crashing the app. Only a small snapshot of each product (id, title, price, image) is stored. `cartCount` and `cartTotal` are derived with `useMemo`.
 - **A guarded `useCart` hook.** `src/hooks/useCart.js` wraps `useContext` and throws a clear error if a component is rendered outside `CartProvider`.
-- **Cancellable parallel fetches.** `ProductList.jsx` loads products and categories with `Promise.all` and passes an `AbortController` signal to Axios, aborting in the effect cleanup so an unmounted page never sets state. `ProductDetails.jsx` uses the same pattern.
+- **Cancellable fetches.** `ProductList.jsx` loads products and categories in parallel with `Promise.all` and passes an `AbortController` signal to Axios. The effect cleanup aborts in-flight requests, and a cancelled request does not show an error. `ProductDetails.jsx` cancels its single request the same way.
 - **Routing.** `src/App.jsx` defines all routes (`/`, `/products`, `/products/:id`, `/addproduct`, `/edit-product/:id`, `/cart`, `/checkout`) and redirects unknown paths to the home page.
 
 ## Getting started
