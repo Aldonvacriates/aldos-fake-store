@@ -66,7 +66,6 @@ src/
 
 - Route every request through `src/api/api.js` (only the edit page uses it today; the list, details and add pages call Axios directly with hardcoded URLs) and read the base URL from a Vite env variable.
 - Use the hooks that are already written but not wired in yet: `useDebounce` for the search box and `useApi` for fetching.
-- Add a Vercel rewrite so direct links to routes such as `/products` load the app instead of returning 404 (navigating from the home page works).
 - Add tests for the cart reducer and the checkout validation.
 
 ## Credits
